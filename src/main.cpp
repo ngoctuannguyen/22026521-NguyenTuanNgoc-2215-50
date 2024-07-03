@@ -19,7 +19,7 @@ int main(int argc, char* argv[]) {
     );
 
     if (window == nullptr) {
-        std::cerr << "Window could not be created! SDL_Error: " << SDL_GetError() << std::endl;
+        std::cout << "Window could not be created! SDL_Error: " << SDL_GetError() << std::endl;
         SDL_Quit();
         return 1;
     }
