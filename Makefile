@@ -4,17 +4,17 @@
 CXX = g++
 
 # Compiler flags
-CXXFLAGS = -std=c++11 -Wall -Ilibrary\include 
+CXXFLAGS = -std=c++11 -Wall -Ilibrary\include
 
 # Linker flags
-LDFLAGS = -Llibrary\lib
-LDLIBS = -lmingw32 -lSDL2main -lSDL2
+LDFLAGS = -Llibrary\lib -w 
+LDLIBS = -lmingw32 -lSDL2main -lSDL2 -lSDL2_image
 
 # Target executable
 TARGET = main
 
 # Source files
-SRCS = src\main.cpp
+SRCS = src\main.cpp src\gameloop.cpp src\background.cpp
 
 # Object files
 OBJS = $(SRCS)
