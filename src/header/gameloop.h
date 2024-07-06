@@ -7,8 +7,8 @@
 class GameLoop {
 
 private:
-    const int WINDOW_HEIGHT = 640;
-    const int WINDOW_WIDTH = 800;
+    static const int WINDOW_HEIGHT = 640;
+    static const int WINDOW_WIDTH = 800;
     SDL_Window* window;
     SDL_Renderer* renderer;
     bool gState;
@@ -22,4 +22,6 @@ public:
     void clear();
     void endGame();
     SDL_Renderer* getRender();
+    static int getWindowHeight();
+    static int getWindowWidth();
 };

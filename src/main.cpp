@@ -7,14 +7,15 @@
 GameLoop* game_loop = new GameLoop();
 
 void initSDL() {
-    // if (!IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG))
-    //     std::cout << "SDL_image error: " << IMG_GetError();
+    if (!IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG))
+        std::cerr << "SDL_image error: " << IMG_GetError();
+    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+        std::cerr << "SDL could not initialize! SDL_Error: " << SDL_GetError() << std::endl;
+        // return 0;
+    }
 }
 
 int main(int argc, char* argv[]) {
-
-    // const int FPS = 290;
-	// const int DELAY_TIME = 1000 / FPS;
 
     initSDL();
     game_loop->initialize();

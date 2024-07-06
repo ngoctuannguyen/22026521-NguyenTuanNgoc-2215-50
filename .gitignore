@@ -11,3 +11,9 @@ SDL2_image-2.8.2
 SDL2_image-2.0.0
 
 .vscode/
+
+src/header/dqn/
+
+mysql-connector-c++-9.0.0-winx64.zip
+
+mysql-connector-c++-9.0.0-winx64

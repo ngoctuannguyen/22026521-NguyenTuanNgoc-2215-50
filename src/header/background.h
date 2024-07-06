@@ -1,8 +1,9 @@
 # pragma once
 #include <SDL2/SDL_image.h>
+#include "object.h"  
 
-class Background {
+class Background: public Object {
 
 public:
-    static void loadBackground(SDL_Renderer* renderer_, const char* file_location);
+    void loadBackground(SDL_Renderer* renderer_, const char* file_location);
 };

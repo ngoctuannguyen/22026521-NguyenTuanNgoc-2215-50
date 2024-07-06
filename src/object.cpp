@@ -29,6 +29,18 @@ void Object::setDest(int x, int y, int w, int h) {
 	dest.h = h;
 }
 
-void Object::CreateTexture(char* address, SDL_Renderer* ren) {
+void Object::createTexture(const char* address, SDL_Renderer* ren) {
 	texture = Texture::texture_create(address, ren);
+}
+
+bool Object::isClicked(bool is_click) {
+	return is_click;
+}
+
+bool Object::isSelected(bool is_select) {
+	return is_select;
+}
+
+void Object::render(SDL_Renderer* renderer) {
+	SDL_RenderCopy(renderer, getTexture(), &this->getSrc(), &this->getDest());
 }

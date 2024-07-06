@@ -1,12 +1,17 @@
 #include "header/gameloop.h"
 #include <SDL2/SDL.h>
 #include "header/background.h"
+#include "header/mainMenu.h"
+
+MainMenu* mainMenu = new MainMenu();
 
 GameLoop::GameLoop() {
     window = NULL;
     renderer = NULL;
     gState = false;
 }   
+
+// GameLoop* 
 
 bool GameLoop::getGState() {
     return gState;
@@ -51,7 +56,7 @@ SDL_Renderer* GameLoop::getRender() {
 void GameLoop::render() {
 
     SDL_RenderClear(renderer);
-    Background::loadBackground(renderer, "res/MainMenu.png");
+    mainMenu->menuRender(renderer, event_);
     SDL_RenderPresent(renderer);
 }
 
@@ -63,4 +68,12 @@ void GameLoop::clear() {
 void GameLoop::endGame() {
     SDL_DestroyWindow(window);
     SDL_Quit();
+}
+
+int GameLoop::getWindowHeight() {
+    return WINDOW_HEIGHT;
+}
+
+int GameLoop::getWindowWidth() {
+    return WINDOW_WIDTH;
 }

@@ -6,6 +6,8 @@ class Object {
 private:
     SDL_Texture* texture;
     SDL_Rect src, dest;
+	bool is_click;
+	bool is_select;
 public:
     Object();
     void setSrc(int x, int y, int w, int h);
@@ -13,5 +15,8 @@ public:
 	SDL_Texture* getTexture();
 	SDL_Rect& getSrc();
 	SDL_Rect& getDest();
-	void CreateTexture(char* address, SDL_Renderer* renderer);
+	void createTexture(const char* address, SDL_Renderer* renderer);
+	bool isClicked(bool is_click);
+	bool isSelected(bool is_select);
+	void render(SDL_Renderer* renderer);
 };

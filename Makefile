@@ -14,7 +14,7 @@ LDLIBS = -lmingw32 -lSDL2main -lSDL2 -lSDL2_image
 TARGET = main
 
 # Source files
-SRCS = src\main.cpp src\gameloop.cpp src\background.cpp
+SRCS = src\main.cpp src\gameloop.cpp src\background.cpp src\mainMenu.cpp src\object.cpp src\button.cpp src\texture.cpp
 
 # Object files
 OBJS = $(SRCS)

@@ -5,7 +5,8 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "C:\\FlappyBird\\SDL2-2.30.4-win32-x64\\",
-                "${workspaceFolder}/library/include"
+                "${workspaceFolder}/library/include",
+                "${workspaceFolder}"
             ],
             "defines": [
                 "_DEBUG",

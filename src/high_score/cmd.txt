@@ -1,0 +1,2 @@
+g++ -o myprogram src/high_score/high_score.cpp -I mysql-connector-c++-9.0.0-winx64/include -L mysql-connector-c++-9.0.0-winx64/lib64 -l mysqlcppconn8
+g++ -o myprogram src/high_score/high_score.cpp -I mysql-connector-c++-9.0.0-winx64/include -L mysql-connector-c++-9.0.0-winx64/lib64 -lmysqlcppconn8
