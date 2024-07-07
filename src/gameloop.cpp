@@ -2,6 +2,10 @@
 #include <SDL2/SDL.h>
 #include "header/background.h"
 #include "header/mainMenu.h"
+#include "header/gamestate.h"
+#include "header/gameplay.h"
+
+GameState currentState;
 
 MainMenu* mainMenu = new MainMenu();
 
@@ -36,6 +40,7 @@ void GameLoop::initialize() {
         renderer = SDL_CreateRenderer(window, -1, 0);
         if (renderer) {
             std::cerr << "Success" << std::endl;
+            GameState currentState = GameState::STATE_PLAYING;
             gState = true;
         }
         else {
@@ -56,7 +61,12 @@ SDL_Renderer* GameLoop::getRender() {
 void GameLoop::render() {
 
     SDL_RenderClear(renderer);
-    mainMenu->menuRender(renderer, event_);
+   // std::cout << currentState << " ";
+    //if (currentState == STATE_PLAYING) {
+        GamePlay* gamePlay = new GamePlay();
+        gamePlay->loadGamePlay(renderer);
+    //}
+    //mainMenu->menuRender(renderer, event_);
     SDL_RenderPresent(renderer);
 }
 

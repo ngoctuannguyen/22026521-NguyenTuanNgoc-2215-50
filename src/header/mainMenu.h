@@ -11,7 +11,7 @@ private:
 	Background menuBackground;
 	Background start;
 	Texture* texture;
-	Button startButton;
+	Button* startButton;
 
 public:
 	MainMenu();

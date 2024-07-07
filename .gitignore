@@ -10,7 +10,7 @@ SDL2_image-2.8.2
 
 SDL2_image-2.0.0
 
-.vscode/
+/.vscode/
 
 src/header/dqn/
 

@@ -29,5 +29,5 @@ public:
     void jump();
     void createTexture1(const char* path, SDL_Renderer* renderer);
     void createTexture2(const char* path, SDL_Renderer* renderer);
-    // void render(SDL_Renderer* renderer);
+    void render(SDL_Renderer* renderer);
 };

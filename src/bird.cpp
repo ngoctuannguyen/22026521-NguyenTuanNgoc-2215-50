@@ -9,8 +9,8 @@ bool Bird::jumpState() {
 	return inJump;
 }
 
-// void Bird::render(SDL_Renderer* ren)
-// {
+void Bird::render(SDL_Renderer* ren)
+{
 // 	animationTimer++;
 // 	if (animationTimer < 25)
 // 	{
@@ -28,7 +28,10 @@ bool Bird::jumpState() {
 // 	{
 // 		animationTimer = 0;
 // 	}
-// }
+	SDL_Texture* birdTexture = Texture::texture_create("res/brown_bird.jpg", ren);
+	SDL_Rect birdRect = {SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 100, 100};
+	SDL_RenderCopy(ren, birdTexture, 0, &birdRect);
+}
 
 void Bird::gravity() {
 	
