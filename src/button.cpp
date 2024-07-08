@@ -40,3 +40,7 @@ bool Button::eventHandler(SDL_Event* e) {
 // void Button::createButton(int x, int y, int w, int h, SDL_Texture* texture) {
 //     Button(int x, int y, int w, int h, SDL_Texture* texture);
 // }
+
+void Button::loadTexture(SDL_Renderer* renderer) {
+    
+}

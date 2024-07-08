@@ -24,4 +24,6 @@ public:
     SDL_Renderer* getRender();
     static int getWindowHeight();
     static int getWindowWidth();
+    void reset();
+
 };

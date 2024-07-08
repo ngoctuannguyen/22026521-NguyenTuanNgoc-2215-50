@@ -5,6 +5,7 @@ class Object {
 
 private:
     SDL_Texture* texture;
+protected:
     SDL_Rect src, dest;
 	bool is_click;
 	bool is_select;
@@ -19,4 +20,5 @@ public:
 	bool isClicked(bool is_click);
 	bool isSelected(bool is_select);
 	void render(SDL_Renderer* renderer);
+	void loadTexture(SDL_Renderer* renderer);
 };

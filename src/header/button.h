@@ -16,4 +16,5 @@ public:
     void createButton(int x, int y, int w, int h, SDL_Texture* texture);
     void render(SDL_Renderer* renderer);
     bool eventHandler(SDL_Event* e);
+    void loadTexture(SDL_Renderer* renderer);
 };

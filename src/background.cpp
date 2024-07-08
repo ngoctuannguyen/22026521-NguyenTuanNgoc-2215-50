@@ -6,3 +6,7 @@ void Background::loadBackground(SDL_Renderer* renderer_, const char* file_name) 
     SDL_RenderCopy(renderer_, texture, 0, 0);
     SDL_RenderPresent(renderer_);
 }
+
+void Background::loadTexture(SDL_Renderer* renderer) {
+    
+}

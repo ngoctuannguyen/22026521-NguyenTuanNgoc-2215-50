@@ -64,7 +64,14 @@ void Pipe::SpaceScore(int i)
 	setDest(xPipe[i] + 20, pipe_height[i], 3, space);
 }
 
-void Pipe::Render(SDL_Renderer* ren)
-{
+void Pipe::Render(SDL_Renderer*& ren)
+{	
+	SDL_RenderClear(ren);
 	SDL_RenderCopy(ren, getTexture(), &getSrc(), &getDest());
+	SDL_RenderPresent(ren);
 }
+
+void Pipe::movePipeToLeft(int i) {
+    xPipe[i]--;
+}
+

@@ -1,5 +1,5 @@
 #pragma once
-#include "Object.h"
+#include "object.h"
 
 class Bird: public Object {
 private:

@@ -3,6 +3,7 @@
 #include <SDL2/SDL_image.h>
 #include "background.h"
 #include "button.h"
+#include "object.h"
 
 class MainMenu: public Object{
 private:
@@ -25,5 +26,6 @@ public:
 	void clear();
 	
 	SDL_Rect destButton;
+	void loadTexture(SDL_Renderer* renderer);
 	// Button startButton(100, 100, 100, 100, Texture* texture);
 };

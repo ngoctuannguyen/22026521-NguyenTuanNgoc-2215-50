@@ -11,26 +11,27 @@ bool Bird::jumpState() {
 
 void Bird::render(SDL_Renderer* ren)
 {
-// 	animationTimer++;
-// 	if (animationTimer < 25)
-// 	{
-// 		SDL_RenderCopyEx(ren, getTexture(), &this -> srcRect, &this -> destRect, angle, NULL, SDL_FLIP_NONE);
-// 	}
-// 	else if (animationTimer >= 25 && animationTimer <= 50)
-// 	{
-// 		SDL_RenderCopyEx(ren, Tex1, &this -> srcRect, &this -> destRect, angle, NULL, SDL_FLIP_NONE);
-// 	}
-// 	else if (animationTimer > 50)
-// 	{
-// 		SDL_RenderCopyEx(ren, Tex2, &this -> srcRect, &this -> destRect, angle, NULL, SDL_FLIP_NONE);
-// 	}
-// 	if (animationTimer > 75)
-// 	{
-// 		animationTimer = 0;
-// 	}
+	animationTimer++;
 	SDL_Texture* birdTexture = Texture::texture_create("res/brown_bird.jpg", ren);
-	SDL_Rect birdRect = {SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 100, 100};
-	SDL_RenderCopy(ren, birdTexture, 0, &birdRect);
+	if (animationTimer < 25)
+	{
+		SDL_RenderCopyEx(ren, birdTexture, &this->src, &this->dest, angle, NULL, SDL_FLIP_NONE);
+	}
+	else if (animationTimer >= 25 && animationTimer <= 50)
+	{
+		SDL_RenderCopyEx(ren, birdTexture, &this->src, &this->dest, angle, NULL, SDL_FLIP_NONE);
+	}
+	else if (animationTimer > 50)
+	{
+		SDL_RenderCopyEx(ren, birdTexture, &this->src, &this->dest, angle, NULL, SDL_FLIP_NONE);
+	}
+	if (animationTimer > 75)
+	{
+		animationTimer = 0;
+	}
+	// SDL_Texture* birdTexture = Texture::texture_create("res/brown_bird.jpg", ren);
+	// SDL_Rect birdRect = {10, 10, 10, 10};
+	// SDL_RenderCopy(ren, birdTexture, NULL, &birdRect);
 }
 
 void Bird::gravity() {
@@ -94,13 +95,3 @@ void Bird::reset() {
 	lastJump = 0;
 	angle = 0;
 }
-
-// void Bird::createTexture1(const std::string path, SDL_Renderer* ren)
-// {
-// 	Tex1 = TextureManager::loadTexture(path, ren);
-// }
-
-// void cird::CreateTexture2(const std::string path, SDL_Renderer* ren)
-// {
-// 	Tex2 = TextureManager::loadTexture(path, ren);
-// }  

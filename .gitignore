@@ -17,3 +17,5 @@ src/header/dqn/
 mysql-connector-c++-9.0.0-winx64.zip
 
 mysql-connector-c++-9.0.0-winx64
+
+src/f.cpp

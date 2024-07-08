@@ -21,5 +21,7 @@ public:
 	int getPipeHeight(int i);
 	int getXPipe(int i);
 	void SpaceScore(int i);
-	void Render(SDL_Renderer* ren);
+	void Render(SDL_Renderer*& ren);
+    void movePipeToLeft(int i);
+	void pipeRender();
 };

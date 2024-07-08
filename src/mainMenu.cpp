@@ -96,3 +96,7 @@ MainMenu::~MainMenu() {
 // void MainMenu::clear(){
 // 	Mix_FreeChunk(startSound);
 // }
+
+void MainMenu::loadTexture(SDL_Renderer* renderer) {
+	
+}

@@ -4,6 +4,7 @@
 #include "header/mainMenu.h"
 #include "header/gamestate.h"
 #include "header/gameplay.h"
+#include "header/gameover.h"
 
 GameState currentState;
 
@@ -58,14 +59,17 @@ SDL_Renderer* GameLoop::getRender() {
     return renderer;
 }
 
+GamePlay* gamePlay = new GamePlay();
+GameOver* gameOver = new GameOver();
+
 void GameLoop::render() {
 
     SDL_RenderClear(renderer);
    // std::cout << currentState << " ";
     //if (currentState == STATE_PLAYING) {
-        GamePlay* gamePlay = new GamePlay();
-        gamePlay->loadGamePlay(renderer);
+    // gamePlay->loadGamePlay(renderer);
     //}
+    gameOver->renderGO(renderer);
     //mainMenu->menuRender(renderer, event_);
     SDL_RenderPresent(renderer);
 }

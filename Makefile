@@ -15,9 +15,10 @@ TARGET = main
 
 # Source files
 SRCS = src\main.cpp src\gameloop.cpp src\background.cpp src\mainMenu.cpp src\object.cpp src\button.cpp src\texture.cpp src\gameplay.cpp src\bird.cpp
+SRC1 = src\pipe.cpp src\gameover.cpp
 
 # Object files
-OBJS = $(SRCS)
+OBJS = $(SRCS) $(SRC1)
 
 # Rule to build the executable
 $(TARGET): $(OBJS)
