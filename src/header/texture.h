@@ -8,4 +8,5 @@ class Texture {
 public:
     static SDL_Texture* texture_create(const char* file_location, SDL_Renderer* renderer);
     //static void textureRender(SDL_Texture* texture_, SDL_Renderer* renderer, SDL_Rect rect);
+    static int getWidth(SDL_Texture* texture);
 };

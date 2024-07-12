@@ -1,27 +1,22 @@
-#pragma once
-#include "object.h"
-#include <ctime>
+#ifndef PIPE_H
+#define PIPE_H
 
-static int pipe_height[3];		//Height of the up pipe
-static int xPipe[3];		//Distance of pipes
+#include <SDL2/SDL.h>
 
-class Pipe : public Object {
-private:
+class Pipe {
 public:
-	int pipeWidth;
-	int pipeHeight;
-	int space;
+    Pipe(SDL_Texture* texture, int x, int y, bool isBottom);
+    void update();
+    void render(SDL_Renderer* renderer);
+    SDL_Rect getRect() const;
+    bool isOffScreen() const;
+    Pipe() {}
+    void setTexture(SDL_Texture* texture);
 
-	int p2h[3];
-	Pipe();
-	Pipe(int x_pos);
-	int pipeRandHeight();
-	void PipeUpdate1(int i, bool birdDie);
-	void PipeUpdate2(int i);
-	int getPipeHeight(int i);
-	int getXPipe(int i);
-	void SpaceScore(int i);
-	void Render(SDL_Renderer*& ren);
-    void movePipeToLeft(int i);
-	void pipeRender();
+private:
+    SDL_Texture* texture;
+    int x, y;
+    bool isBottom;
 };
+
+#endif

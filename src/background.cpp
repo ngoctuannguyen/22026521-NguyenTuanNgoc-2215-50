@@ -10,3 +10,11 @@ void Background::loadBackground(SDL_Renderer* renderer_, const char* file_name) 
 void Background::loadTexture(SDL_Renderer* renderer) {
     
 }
+
+void Background::scroll(int distance) {
+
+    if (scrollingOffset > distance) {
+        scrollingOffset -= distance;
+    }    
+    else scrollingOffset = 0; ////////
+}

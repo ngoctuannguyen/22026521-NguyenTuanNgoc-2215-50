@@ -12,3 +12,7 @@ SDL_Texture* Texture::texture_create(const char* file_location, SDL_Renderer* re
 //     SDL_RenderCopy(renderer, texture, NULL, &rect);
 //     SDL_RenderPresent(renderer);
 // }
+
+// int Texture::getWidth(SDL_Texture* texture) {
+//     return 
+// }

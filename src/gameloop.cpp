@@ -10,6 +10,9 @@ GameState currentState;
 
 MainMenu* mainMenu = new MainMenu();
 
+GamePlay* gamePlay = new GamePlay();
+GameOver* gameOver = new GameOver();
+
 GameLoop::GameLoop() {
     window = NULL;
     renderer = NULL;
@@ -23,13 +26,17 @@ bool GameLoop::getGState() {
 }
 
 void GameLoop::event() {
-    SDL_PollEvent(&event_); // The SDL_PollEvent function is used to poll for currently pending events and processes them
-    if (event_.type == SDL_QUIT) {
-        gState = false;
+    while(SDL_PollEvent(&event_)) {
+        // The SDL_PollEvent function is used to poll for currently pending events and processes them
+        if (event_.type == SDL_QUIT) {
+            gState = false;
+        }
+        if (event_.type == SDL_MOUSEMOTION) {
+            // std::cout << event_.motion.x << " " << event_.motion.y << std::endl;
+        }
     }
-    if (event_.type == SDL_MOUSEMOTION) {
-        // std::cout << event_.motion.x << " " << event_.motion.y << std::endl;
-    }
+    gamePlay->handleEvent(event_);
+
 }
 
 void GameLoop::initialize() {
@@ -59,18 +66,17 @@ SDL_Renderer* GameLoop::getRender() {
     return renderer;
 }
 
-GamePlay* gamePlay = new GamePlay();
-GameOver* gameOver = new GameOver();
-
 void GameLoop::render() {
 
     SDL_RenderClear(renderer);
    // std::cout << currentState << " ";
     //if (currentState == STATE_PLAYING) {
-    // gamePlay->loadGamePlay(renderer);
+    //gamePlay->loadGamePlay(renderer); 
+    // Load gameplay with bird, ground, sky
     //}
-    gameOver->renderGO(renderer);
+    // gameOver->renderGO(renderer);
     //mainMenu->menuRender(renderer, event_);
+    gamePlay->spawnPipes(renderer);
     SDL_RenderPresent(renderer);
 }
 
@@ -90,4 +96,8 @@ int GameLoop::getWindowHeight() {
 
 int GameLoop::getWindowWidth() {
     return WINDOW_WIDTH;
+}
+
+void GameLoop::setGState(bool _gState) {
+    gState = _gState;
 }

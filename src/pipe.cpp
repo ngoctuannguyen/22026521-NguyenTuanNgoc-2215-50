@@ -1,77 +1,30 @@
 #include "header/pipe.h"
-#include <ctime>
-#include <iostream>
 
-Pipe::Pipe()
-{
-	pipeWidth = 80;
-	pipeHeight = 360;
-	space = 190;
+// Pipe properties
+const int PIPE_WIDTH = 50;
+const int PIPE_HEIGHT = 320;
+const int PIPE_VELOCITY = 2;
+
+Pipe::Pipe(SDL_Texture* texture, int x, int y, bool isBottom)
+    : texture(texture), x(x), y(y), isBottom(isBottom) {}
+
+void Pipe::update() {
+    x -= PIPE_VELOCITY;
 }
 
-Pipe::Pipe(int x_pos)
-{
-	srand(time(NULL));
-	xPipe[x_pos] = (x_pos + 4) * 320;
-    pipe_height[x_pos] = Pipe::pipeRandHeight();
-	p2h[x_pos] = pipe_height[x_pos] + space;
-	setDest(xPipe[x_pos], pipe_height[x_pos] - pipeHeight, pipeWidth, pipeHeight);
+void Pipe::render(SDL_Renderer* renderer) {
+    SDL_Rect dstRect = {x, y, PIPE_WIDTH, PIPE_HEIGHT};
+    SDL_RenderCopyEx(renderer, texture, NULL, &dstRect, 0, NULL, isBottom ? SDL_FLIP_VERTICAL : SDL_FLIP_NONE);
 }
 
-int Pipe::pipeRandHeight()
-{
-	return rand() * rand() % (330 - 100 + 1) + 100;
+SDL_Rect Pipe::getRect() const {
+    return {x, y, PIPE_WIDTH, PIPE_HEIGHT};
 }
 
-void Pipe::PipeUpdate1(int i, bool birdDie)
-{
-	if (xPipe[i] <= -pipeWidth)
-	{
-	    pipe_height[i] = Pipe::pipeRandHeight();
-		xPipe[i] = 880;
-	}
-	else
-	{
-		if(!birdDie) {
-		    xPipe[i]--;
-		//setSrc(0, 0, 125, 500);
-        }
-		setDest(xPipe[i], pipe_height[i] - pipeHeight, pipeWidth, pipeHeight);
-	}
+bool Pipe::isOffScreen() const {
+    return x + PIPE_WIDTH < 0;
 }
 
-void Pipe::PipeUpdate2(int i)
-{
-	p2h[i] = pipe_height[i] + space;
-	setSrc(0, 0, 125, 500);
-	setDest(xPipe[i], p2h[i], pipeWidth, pipeHeight);
+void Pipe::setTexture(SDL_Texture* texture_) {
+    texture = texture_;
 }
-
-int Pipe::getPipeHeight(int i)
-{
-	return pipe_height[i];
-}
-
-int Pipe::getXPipe(int i)
-{
-	return xPipe[i];
-}
-
-void Pipe::SpaceScore(int i)
-{
-	setSrc(0, 0, NULL, NULL);
-	//setSrc(0, 0, 78, 69);	//test spaceScore
-	setDest(xPipe[i] + 20, pipe_height[i], 3, space);
-}
-
-void Pipe::Render(SDL_Renderer*& ren)
-{	
-	SDL_RenderClear(ren);
-	SDL_RenderCopy(ren, getTexture(), &getSrc(), &getDest());
-	SDL_RenderPresent(ren);
-}
-
-void Pipe::movePipeToLeft(int i) {
-    xPipe[i]--;
-}
-

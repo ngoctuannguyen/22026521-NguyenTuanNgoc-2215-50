@@ -16,6 +16,7 @@ private:
 public: 
     GameLoop();
     bool getGState();
+    void setGState(bool _gState);
     void initialize();
     void event();
     void render();
@@ -25,5 +26,4 @@ public:
     static int getWindowHeight();
     static int getWindowWidth();
     void reset();
-
 };
