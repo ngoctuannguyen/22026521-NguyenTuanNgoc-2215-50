@@ -13,6 +13,8 @@ MainMenu* mainMenu = new MainMenu();
 GamePlay* gamePlay = new GamePlay();
 GameOver* gameOver = new GameOver();
 
+const std::string HIGH_SCORE_FILE = "highscore.txt";
+
 GameLoop::GameLoop() {
     window = NULL;
     renderer = NULL;
@@ -42,7 +44,7 @@ void GameLoop::event() {
 void GameLoop::initialize() {
     SDL_Init(SDL_INIT_EVERYTHING);
     window = SDL_CreateWindow(
-        "Flappy Bird", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_RESIZABLE
+        "Flappy Bird", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, 0
     );
     if (window) {
         renderer = SDL_CreateRenderer(window, -1, 0);
@@ -75,8 +77,8 @@ void GameLoop::render() {
     // Load gameplay with bird, ground, sky
     //}
     // gameOver->renderGO(renderer);
-    //mainMenu->menuRender(renderer, event_);
-    gamePlay->spawnPipes(renderer);
+    mainMenu->menuRender(renderer, event_);
+    //gamePlay->spawnPipes(renderer);
     SDL_RenderPresent(renderer);
 }
 
@@ -100,4 +102,22 @@ int GameLoop::getWindowWidth() {
 
 void GameLoop::setGState(bool _gState) {
     gState = _gState;
+}
+
+int loadHighScore() {
+    std::ifstream file(HIGH_SCORE_FILE);
+    int highScore = 0;
+    if (file.is_open()) {
+        file >> highScore;
+        file.close();
+    }
+    return highScore;
+}
+
+void saveHighScore(int highScore) {
+    std::ofstream file(HIGH_SCORE_FILE);
+    if (file.is_open()) {
+        file << highScore;
+        file.close();
+    }
 }

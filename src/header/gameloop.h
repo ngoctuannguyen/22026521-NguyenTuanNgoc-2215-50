@@ -2,6 +2,8 @@
 #pragma once
 
 #include <iostream>
+#include <fstream>
+
 
 
 class GameLoop {
@@ -26,4 +28,6 @@ public:
     static int getWindowHeight();
     static int getWindowWidth();
     void reset();
+    int loadHighScore();
+    void saveHighScore(int highScore);
 };

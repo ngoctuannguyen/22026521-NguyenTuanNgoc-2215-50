@@ -4,7 +4,7 @@
 class Bird: public Object {
 private:
     
-    int yPos = 10;
+    int x, yPos = 10;
     int animationTimer;
     
     double angle = 0;
@@ -20,7 +20,8 @@ private:
     
     SDL_Texture* Tex1;
     SDL_Texture* birdTexture;
-
+    
+    int BIRD_WIDTH;
     const int BIRD_HEIGHT = 100;
     const double FLAP_STRENGTH = -6.00f;
 
@@ -42,4 +43,5 @@ public:
     void flap();
     void setTexture(SDL_Texture* texture);
     void setRender(SDL_Renderer* renderer_);
+    SDL_Rect getRect();
 };

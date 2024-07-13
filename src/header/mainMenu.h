@@ -13,6 +13,8 @@ private:
 	Background start;
 	Texture* texture;
 	Button* startButton;
+	bool isClicked;
+	bool isSelected;
 
 public:
 	MainMenu();

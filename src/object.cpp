@@ -2,6 +2,7 @@
 
 Object::Object() {
 	texture = NULL;
+	
 }
 
 SDL_Texture* Object::getTexture() {

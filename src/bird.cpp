@@ -142,3 +142,6 @@ void Bird::reset() {
 	angle = 0;
 }
 
+SDL_Rect Bird::getRect() {
+	return {x, yPos, BIRD_WIDTH, BIRD_HEIGHT};
+}

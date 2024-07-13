@@ -10,8 +10,6 @@ public:
     void render(SDL_Renderer* renderer);
     SDL_Rect getRect() const;
     bool isOffScreen() const;
-    Pipe() {}
-    void setTexture(SDL_Texture* texture_);
 
 private:
     SDL_Texture* texture;
