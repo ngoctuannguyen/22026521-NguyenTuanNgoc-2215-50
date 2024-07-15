@@ -8,11 +8,11 @@ Button::~Button() {}
 
 Button::Button(int x, int y, int w, int h, SDL_Texture* texture) 
     : rect{x, y , w, h}, texture(texture) {
-    src = {NULL, NULL, NULL, NULL};
     dest = rect;
 } 
 
 void Button::render(SDL_Renderer* renderer) {
+    //std::cout << this->getSrc().w << " " << this->getDest().w << std::endl;
     SDL_RenderCopy(renderer, texture, &this->getSrc(), &this->getDest());
 }
 

@@ -5,25 +5,30 @@
 MainMenu::MainMenu() {
 	isClicked = false;
 	isSelected = false;
-	destButton.x = 300;
-	destButton.y = 490;
-	destButton.w = 200;
-	destButton.h = 80;
+	destButton.x = 270;
+	destButton.y = 500;
+	destButton.w = 250;
+	destButton.h = 70;
 }
 
 void MainMenu::Initialize(SDL_Renderer* renderer)
 {
-	//menuBackground.loadBackground(renderer, "res/MainMenu.png");
 	SDL_Texture* startTextture = Texture::texture_create("res/PressStart.PNG", renderer);
 
 	startButton = new Button(destButton.x, destButton.y, destButton.w, destButton.h, startTextture);
+	startButton->setSrc(0, 0, 225, 66);
 	startButton->setDest(destButton.x, destButton.y, destButton.w, destButton.h);
-	// startSound = Mix_LoadWAV("Audio/replaySound.wav");
-	// if(startSound == NULL)
-	// {
-	// 	std::cout<<"wrong"<<std::endl;
-	// }
+	startButton->render(renderer);
+	
+	menuBackground.loadBackground(renderer, "res/MainMenu.png");
+
+	startSound = Mix_LoadWAV("res/audio/replaySound.wav");
+	if(startSound == NULL)
+	{
+		std::cout<< Mix_GetError() <<std::endl;
+	}
 }
+
 bool MainMenu::checkSelected(int x, int y)
 {
 	if (x >= destButton.x 
@@ -41,7 +46,6 @@ void MainMenu::menuRender(SDL_Renderer* renderer, SDL_Event &e)
 	while(true)
 	{	
 		startButton->render(renderer);
-		//menuBackground.render(renderer);
 		//SDL_RenderCopy(renderer, startButton, &this->getSrc(), &this->getDest());
 		while(SDL_PollEvent(&e))
 		{
@@ -72,19 +76,20 @@ void MainMenu::menuRender(SDL_Renderer* renderer, SDL_Event &e)
 				}
 			}
 			if (e.type == SDL_MOUSEBUTTONDOWN
-				&& e.motion.x > 215 
-				&& e.motion.x < 380 
-				&& e.motion.y > 640 
-				&& e.motion.y < 700)
+				&& e.motion.x > destButton.x 
+				&& e.motion.x < destButton.x + destButton.w 
+				&& e.motion.y > destButton.y 
+				&& e.motion.y < destButton.y + destButton.h)
 			{
-				// Mix_PlayChannel(-1, startSound, 0);
+				Mix_PlayChannel(-1, startSound, 0);
+				std::cout << "FFFFF" << std::endl;
 				isClicked = true;
 			}
 				// std::cout << "true" << std::endl;
-				if (startButton->eventHandler(&e)) {
-					std::cout << "True" << std::endl;
-				}
-			}
+			if (startButton->eventHandler(&e)) {
+				std::cout << "True" << std::endl;
+			}	
+		}
 			if(isClicked) {
 				break;
 			}
@@ -94,12 +99,12 @@ void MainMenu::menuRender(SDL_Renderer* renderer, SDL_Event &e)
 MainMenu::~MainMenu() {
 	// isClicked = false;
 	// isSelected = false;
-	delete startButton;
+	startButton = NULL;
+	Mix_FreeChunk(startSound);
+	Mix_CloseAudio();
+    Mix_Quit();
 	// SDL_DestroyTexture(startText)
 }
-// void MainMenu::clear(){
-// 	Mix_FreeChunk(startSound);
-// }
 
 void MainMenu::loadTexture(SDL_Renderer* renderer) {
 	

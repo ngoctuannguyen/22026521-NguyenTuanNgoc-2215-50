@@ -5,7 +5,6 @@
 #include <fstream>
 
 
-
 class GameLoop {
 
 private:

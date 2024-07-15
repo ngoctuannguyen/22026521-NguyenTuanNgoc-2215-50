@@ -3,6 +3,7 @@
 #include "header/gameloop.h"
 // #include "header/texture.h"
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_mixer.h>
 
 GameLoop* game_loop = new GameLoop();
 
@@ -13,6 +14,11 @@ void initSDL() {
         std::cerr << "SDL could not initialize! SDL_Error: " << SDL_GetError() << std::endl;
         // return 0;
     }
+    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
+        std::cerr << "SDL_mixer could not initialize! SDL_mixer Error: " << Mix_GetError() << std::endl;
+        //return false;
+    }
+
 }
 
 int main(int argc, char* argv[]) {
