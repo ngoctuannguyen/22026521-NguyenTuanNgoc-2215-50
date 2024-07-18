@@ -45,7 +45,6 @@ void MainMenu::menuRender(SDL_Renderer* renderer, SDL_Event &e)
 	Initialize(renderer);
 	while(true)
 	{	
-		startButton->render(renderer);
 		//SDL_RenderCopy(renderer, startButton, &this->getSrc(), &this->getDest());
 		while(SDL_PollEvent(&e))
 		{
@@ -60,7 +59,9 @@ void MainMenu::menuRender(SDL_Renderer* renderer, SDL_Event &e)
 						isSelected = true;
 						start.setSrc(0, 0, 225, 66);
 						start.setDest(destButton.x, destButton.y, destButton.w, destButton.h);
-						std::cout << "F1" << std::endl;
+						std::cout << "not Selected" << std::endl;
+						startButton->render(renderer);
+
 					}
 				}
 				else
@@ -68,9 +69,10 @@ void MainMenu::menuRender(SDL_Renderer* renderer, SDL_Event &e)
 					if(isSelected)
 					{
 						isSelected = false;
-						start.setSrc(252,0, 225, 66);
+						start.setSrc(252, 0, 225, 66);
 						start.setDest(destButton.x, destButton.y, destButton.w, destButton.h);
-						std::cout << "F2" << std::endl;
+						std::cout << "Selected" << std::endl;
+						startButton->render(renderer);
 
 					}
 				}
@@ -96,9 +98,9 @@ void MainMenu::menuRender(SDL_Renderer* renderer, SDL_Event &e)
 		}
 }
 
-MainMenu::~MainMenu() {
-	// isClicked = false;
-	// isSelected = false;
+void MainMenu::destroy() {
+	isClicked = false;
+	isSelected = false;
 	startButton = NULL;
 	Mix_FreeChunk(startSound);
 	Mix_CloseAudio();

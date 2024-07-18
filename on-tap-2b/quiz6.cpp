@@ -3,8 +3,9 @@
 using namespace std;
 
 string checkPalidrome(string strInput) {
-    for (int i = 0; i < strInput.length() / 2; ++i) {
+    for (int i = 0; i < int(strInput.length() / 2); ++i) {
         if (strInput[i] != strInput[strInput.length() - 1 - i]) {
+            //cout << strInput[i] << " " << strInput[strInput.length() - 1 - i] << endl;
             return "No";
         }
     }

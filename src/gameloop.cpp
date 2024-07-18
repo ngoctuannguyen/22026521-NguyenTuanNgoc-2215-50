@@ -36,8 +36,10 @@ void GameLoop::event() {
         if (event_.type == SDL_MOUSEMOTION) {
             // std::cout << event_.motion.x << " " << event_.motion.y << std::endl;
         }
+        gamePlay->handleEvent(event_);
+
     }
-    gamePlay->handleEvent(event_);
+    // gamePlay->handleEvent(event_);
 
 }
 
@@ -73,16 +75,17 @@ void GameLoop::render() {
     SDL_RenderClear(renderer);
    // std::cout << currentState << " ";
     //if (currentState == STATE_PLAYING) {
-    //gamePlay->loadGamePlay(renderer); 
+    gamePlay->loadGamePlay(renderer); 
     // Load gameplay with bird, ground, sky
     //}
     // gameOver->renderGO(renderer);
-    mainMenu->menuRender(renderer, event_);
+    //mainMenu->menuRender(renderer, event_);
     //gamePlay->spawnPipes(renderer);
     SDL_RenderPresent(renderer);
 }
 
 void GameLoop::clear() {
+    mainMenu->destroy();
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
 }

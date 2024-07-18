@@ -27,6 +27,7 @@ public:
 	void render(SDL_Renderer* renderer);
 	bool checkSelected(int x, int y);
 	void clear();
+	void destroy();
 	
 	SDL_Rect destButton;
 	void loadTexture(SDL_Renderer* renderer);

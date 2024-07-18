@@ -10,9 +10,6 @@ GamePlay::GamePlay() {
 SDL_Texture* GamePlay::loadPipe(SDL_Renderer* renderer) {
     SDL_Texture* pipeTexture = Texture::texture_create("res/pipeTop.png", renderer);
     pipe.setTexture(pipeTexture);
-    // std::cout << "OK";
-    // upperPipe.setSrc(100, 500, 50, 50);
-    // upperPipe.setDest(0, 0, 50, 50);
     return pipeTexture;
 }
 
@@ -26,32 +23,36 @@ void GamePlay::loadGamePlay(SDL_Renderer* renderer) {
     //textureRender(skyTexture, renderer, {0, 0, GameLoop::getWindowWidth(), GameLoop::getWindowHeight()});
     //loadPipe(renderer);
     //textureRender(groundTexture, renderer, {0, 500, 800, 140});
-    // bird.setTexture(birdTexture);
-    // bird.setRender(renderer);   
-    // bird.render(renderer, birdTexture);
+    bird.setTexture(birdTexture);
+    bird.setRender(renderer);   
+    bird.render(renderer, birdTexture);
 }
 
 bool GamePlay::isDie() {
     return false;
 }
 
-GameLoop* gameLoop1 = new GameLoop();
+GameLoop* gameLoop;
 
-void GamePlay::handleEvent(SDL_Event &e) {
+void GamePlay::handleEvent(SDL_Event &event) {
     // bird.getJumpTime();
-    // while (SDL_PollEvent(&e)) {
-        if (e.type == SDL_QUIT) {
-            gameLoop1->setGState(false);
+    while (SDL_PollEvent(&event)) {
+        if (event.type == SDL_QUIT) {
+            gameLoop->setGState(false);
         }
-        // e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_SPACE
-        else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_SPACE) {
+        else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_SPACE) {
             std::cout << "True" << "\n";
             bird.flap();
         }
-    
+
         bird.update();
-        bird.render(bird.getRender(), bird.getTexture());
-    // }
+        SDL_Renderer* renderer = bird.getRender();
+        SDL_RenderClear(renderer);
+        bird.render(renderer, bird.getTexture());
+        SDL_RenderPresent(renderer);
+        //SDL_Delay(16); 
+
+    }
 }
 
 void GamePlay::textureRender(SDL_Texture* texture, SDL_Renderer* renderer, SDL_Rect rect) {
@@ -67,19 +68,19 @@ const int PIPE_HEIGHT = 320;
 
 // Pipe properties
 const int PIPE_GAP = 200;
-const int PIPE_SPAWN_INTERVAL = 150; // Frames between new pipe spawns
+const int PIPE_SPAWN_INTERVAL = 200; // Frames between new pipe spawns
 
 int frameCount = 0;
 
 void GamePlay::spawnPipes(SDL_Renderer* renderer) {
-    srand(time(NULL));
+    srand(SDL_GetTicks());
     if (frameCount % PIPE_SPAWN_INTERVAL == 0) {
-        int gapY = rand() % (SCREEN_HEIGHT - PIPE_GAP - 100) + 50;
+        int gapY = rand() % (SCREEN_HEIGHT - PIPE_GAP - 150) + 50;
         std::cout << gapY << " ";
         pipes.emplace_back(loadPipe(renderer),
         GameLoop::getWindowHeight(), gapY + PIPE_GAP, true);
         pipes.emplace_back(loadPipe(renderer), 
-        GameLoop::getWindowWidth(), gapY - PIPE_HEIGHT, false);
+        GameLoop::getWindowHeight(), gapY - PIPE_HEIGHT, false);
     }
 
     for (auto it = pipes.begin(); it != pipes.end();) {
@@ -102,14 +103,3 @@ void GamePlay::spawnPipes(SDL_Renderer* renderer) {
     SDL_Delay(16); // Delay to control frame rate (approximately 60 FPS)
     frameCount++;
 }
-
-// bool GamePlay::checkCollision() {
-//     SDL_Rect birdRect = bird.getRect();
-//     for (const auto& pipe : pipes) {
-//         SDL_Rect pipeRect = pipe.getRect();
-//         if (SDL_HasIntersection(&birdRect, &pipeRect)) {
-//             return true;
-//         }
-//     }
-//     return false;
-// }
