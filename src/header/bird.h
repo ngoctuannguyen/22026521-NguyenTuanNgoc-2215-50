@@ -10,7 +10,7 @@ private:
     double angle = 0;
     double accelerator1 = 0;
     double accelerator2 = 0;
-    double gravity_ = 0.25f;
+    double gravity = 5;
     double jumpHeight = -5;
     double jumpTimer;
     double lastJump = 0;
@@ -23,7 +23,7 @@ private:
     
     int BIRD_WIDTH;
     const int BIRD_HEIGHT = 100;
-    const double FLAP_STRENGTH = -6.00f;
+    const double FLAP_STRENGTH = -15.00f;
 
     SDL_Renderer* renderer;
 
@@ -33,7 +33,6 @@ public:
     int getYpos();
     bool jumpState();
     SDL_Renderer* getRender();
-    void gravity();
     void getJumpTime();
     void reset();
     void jump();

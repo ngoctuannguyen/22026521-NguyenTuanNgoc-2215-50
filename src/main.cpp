@@ -18,6 +18,7 @@ void initSDL() {
         std::cerr << "SDL_mixer could not initialize! SDL_mixer Error: " << Mix_GetError() << std::endl;
         //return false;
     }
+    game_loop->initSound();
 
 }
 

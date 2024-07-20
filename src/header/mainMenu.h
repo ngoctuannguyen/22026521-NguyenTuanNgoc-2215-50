@@ -1,26 +1,27 @@
 #pragma once
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-#include <SDL2/SDL_mixer.h>
 #include "background.h"
 #include "button.h"
 #include "object.h"
+#include "gameloop.h"
 
 class MainMenu: public Object{
 private:
 	
-	Mix_Chunk* startSound;	
 	Background menuBackground;
 	Background start;
 	Texture* texture;
 	Button* startButton;
 	bool isClicked;
 	bool isSelected;
+	GameLoop* gameloop;
+	Mix_Chunk* startSound;
 
 public:
 	MainMenu();
 	~MainMenu();
-	
+	void initSound();
 	int EventHandling(SDL_Event& e);
 	void Initialize(SDL_Renderer* renderer);
 	void menuRender(SDL_Renderer* renderer, SDL_Event& e);

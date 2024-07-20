@@ -1,6 +1,5 @@
 #pragma once
 #include "header/mainMenu.h"
-#include "header/gameloop.h"
 
 MainMenu::MainMenu() {
 	isClicked = false;
@@ -9,6 +8,13 @@ MainMenu::MainMenu() {
 	destButton.y = 500;
 	destButton.w = 250;
 	destButton.h = 70;
+}
+
+void MainMenu::initSound() {
+	startSound = Mix_LoadWAV("res/audio/restartSound.wav");
+	if (startSound == NULL) {
+		std::cout << Mix_GetError << std::endl;
+	}
 }
 
 void MainMenu::Initialize(SDL_Renderer* renderer)
@@ -21,12 +27,6 @@ void MainMenu::Initialize(SDL_Renderer* renderer)
 	startButton->render(renderer);
 	
 	menuBackground.loadBackground(renderer, "res/MainMenu.png");
-
-	startSound = Mix_LoadWAV("res/audio/replaySound.wav");
-	if(startSound == NULL)
-	{
-		std::cout<< Mix_GetError() <<std::endl;
-	}
 }
 
 bool MainMenu::checkSelected(int x, int y)
@@ -102,7 +102,7 @@ void MainMenu::destroy() {
 	isClicked = false;
 	isSelected = false;
 	startButton = NULL;
-	Mix_FreeChunk(startSound);
+	Mix_FreeChunk(gameloop->startSound);
 	Mix_CloseAudio();
     Mix_Quit();
 	// SDL_DestroyTexture(startText)

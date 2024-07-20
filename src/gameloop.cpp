@@ -21,7 +21,17 @@ GameLoop::GameLoop() {
     gState = false;
 }   
 
-// GameLoop* 
+void GameLoop::initSound() {
+    wingSound = Mix_LoadWAV("res/audio/wing.wav");
+    if (wingSound == NULL) {
+        std::cout << Mix_GetError() << std::endl;
+    }
+    startSound = Mix_LoadWAV("res/audio/replaySound.wav");
+    pointSound = Mix_LoadWAV("res/audio/point.wav");
+    hitSound = Mix_LoadWAV("res/audio/hit.wav");
+    exitSound = Mix_LoadWAV("res/audio/exitSound.wav");
+    dieSound = Mix_LoadWAV("res/audio/die.wav");
+}
 
 bool GameLoop::getGState() {
     return gState;
@@ -80,8 +90,8 @@ void GameLoop::render() {
     //}
     // gameOver->renderGO(renderer);
     //mainMenu->menuRender(renderer, event_);
-    //gamePlay->spawnPipes(renderer);
-    SDL_RenderPresent(renderer);
+    gamePlay->spawnPipes(renderer);
+    // SDL_RenderPresent(renderer);
 }
 
 void GameLoop::clear() {

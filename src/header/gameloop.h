@@ -1,6 +1,6 @@
 #include <SDL2/SDL.h>
 #pragma once
-
+#include <SDL2/SDL_mixer.h>
 #include <iostream>
 #include <fstream>
 
@@ -14,8 +14,10 @@ private:
     SDL_Renderer* renderer;
     bool gState;
     SDL_Event event_;
+
 public: 
     GameLoop();
+    void initSound();
     bool getGState();
     void setGState(bool _gState);
     void initialize();
@@ -29,4 +31,13 @@ public:
     void reset();
     int loadHighScore();
     void saveHighScore(int highScore);
+
+    // Sound
+    
+    Mix_Chunk* startSound;
+    Mix_Chunk* wingSound;
+    Mix_Chunk* pointSound;
+    Mix_Chunk* dieSound;
+    Mix_Chunk* hitSound;
+    Mix_Chunk* exitSound;
 };

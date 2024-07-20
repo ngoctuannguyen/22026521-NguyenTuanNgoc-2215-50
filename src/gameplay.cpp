@@ -7,6 +7,13 @@ GamePlay::GamePlay() {
 
 }
 
+void GamePlay::initSound() {
+    wingSound = Mix_LoadWAV("res/audio/wing.wav");
+    if (wingSound == NULL) {
+        std::cout << Mix_GetError << std::endl;
+    }
+}
+
 SDL_Texture* GamePlay::loadPipe(SDL_Renderer* renderer) {
     SDL_Texture* pipeTexture = Texture::texture_create("res/pipeTop.png", renderer);
     pipe.setTexture(pipeTexture);
@@ -18,14 +25,10 @@ void GamePlay::loadGamePlay(SDL_Renderer* renderer) {
     SDL_Texture* groundTexture = Texture::texture_create("res/baselong.png", renderer);
     SDL_Texture* skyTexture = Texture::texture_create("res/playBackground.png", renderer);
     SDL_Texture* birdTexture = Texture::texture_create("res/brown_bird.png", renderer);
-    // SDL_Texture* topPipeTexture = Texture::texture_create("res/pipeTop.png", renderer);
-    // SDL_Texture* bottomPipeTexture = Texture::texture_create("res/pipeBottom.png", renderer);
-    //textureRender(skyTexture, renderer, {0, 0, GameLoop::getWindowWidth(), GameLoop::getWindowHeight()});
-    //loadPipe(renderer);
-    //textureRender(groundTexture, renderer, {0, 500, 800, 140});
     bird.setTexture(birdTexture);
     bird.setRender(renderer);   
     bird.render(renderer, birdTexture);
+    initSound();
 }
 
 bool GamePlay::isDie() {
@@ -36,27 +39,25 @@ GameLoop* gameLoop;
 
 void GamePlay::handleEvent(SDL_Event &event) {
     // bird.getJumpTime();
-    while (SDL_PollEvent(&event)) {
-        if (event.type == SDL_QUIT) {
-            gameLoop->setGState(false);
-        }
-        else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_SPACE) {
-            std::cout << "True" << "\n";
-            bird.flap();
-        }
-
-        bird.update();
-        SDL_Renderer* renderer = bird.getRender();
-        SDL_RenderClear(renderer);
-        bird.render(renderer, bird.getTexture());
-        SDL_RenderPresent(renderer);
-        //SDL_Delay(16); 
-
+    SDL_Renderer* renderer = bird.getRender();
+    SDL_Texture* texture = bird.getTexture();
+    if (event.type == SDL_QUIT) {
+        gameLoop->setGState(false);
     }
+    else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_SPACE) {
+        std::cout << "True" << "\n";
+        bird.flap();
+        Mix_PlayChannel(-1, wingSound, 0);
+    }
+    bird.update();
+    SDL_RenderClear(renderer);
+    bird.render(renderer, texture);
+    // SDL_RenderPresent(renderer);
+    // SDL_Delay(16); 
 }
 
 void GamePlay::textureRender(SDL_Texture* texture, SDL_Renderer* renderer, SDL_Rect rect) {
-    SDL_RenderClear(renderer);
+    // SDL_RenderClear(renderer);
     SDL_RenderCopy(renderer, texture, NULL, &rect);
     SDL_RenderPresent(renderer);
 }
@@ -76,7 +77,7 @@ void GamePlay::spawnPipes(SDL_Renderer* renderer) {
     srand(SDL_GetTicks());
     if (frameCount % PIPE_SPAWN_INTERVAL == 0) {
         int gapY = rand() % (SCREEN_HEIGHT - PIPE_GAP - 150) + 50;
-        std::cout << gapY << " ";
+        ///std::cout << gapY << " ";
         pipes.emplace_back(loadPipe(renderer),
         GameLoop::getWindowHeight(), gapY + PIPE_GAP, true);
         pipes.emplace_back(loadPipe(renderer), 
@@ -99,7 +100,7 @@ void GamePlay::spawnPipes(SDL_Renderer* renderer) {
 
     SDL_SetRenderDrawColor(renderer, 173, 216, 230, 255); // Light blue color
 
-    //SDL_RenderPresent(renderer);
+    SDL_RenderPresent(renderer);
     SDL_Delay(16); // Delay to control frame rate (approximately 60 FPS)
     frameCount++;
 }

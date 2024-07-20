@@ -6,6 +6,7 @@
 #include "bird.h"
 #include "background.h"
 #include "pipe.h"
+#include "gameloop.h"
 
 class GamePlay {
 
@@ -15,10 +16,15 @@ private:
     Pipe pipe;
     SDL_Event e;
     std::vector<Pipe> pipes;
+    Mix_Chunk* wingSound;
 
 public:
     GameState currentState;
     GamePlay();
+
+    // Sound
+    void initSound();
+
     void checkpoint();
     void loadGamePlay(SDL_Renderer* renderer);
     bool isDie();
