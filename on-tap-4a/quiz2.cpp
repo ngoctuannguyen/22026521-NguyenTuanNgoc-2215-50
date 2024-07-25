@@ -2,46 +2,49 @@
 
 using namespace std;
 
-struct Time {
-    int h;
-    int m;
-    int s;
+struct Rectangle {
+    int height = 0;
+    int length = 0;
 
-    Time() {
-        h = 0;
-        m = 0;
-        s = 0;
+    Rectangle() {
+        height = 0;
+        length = 0;
     }
 
-    Time(int h_, int m_, int s_) {
-        h = h_;
-        m = m_;
-        s = s_;
+    Rectangle(int height_, int length_) {
+        height = height_;
+        length = length_;
     }
 
-    int second() {
-        return h * 3600 + m * 60 + s;
+    int getPerimeter() {
+        if (height > 0 && length > 0)
+            return (height + length) << 1;
+        else return 0;
     }
 
     void print() {
-        if (h < 10)
-            cout << 0 << h << ":";
-        else cout << h << ":";
-        if (m < 10)
-            cout << 0 << m << ":";
-        else cout << m << ":";
-        if (s < 10)
-            cout << 0 << s << endl;
-        else cout << s << endl;
+        for (int i = 1; i <= height; ++i) {
+            for (int j = 1; j <= length; ++j) {
+                if (i == 1 || i == height) {
+                    cout << "*";
+                }
+                else {
+                    if (j == 1 || j == length)
+                        cout << "*";
+                    else cout << " ";
+                }
+            }
+            cout << endl;
+        }
     }
 };
 
 
-Time normalize(int h, int m, int s) {
-    Time ans;
-    int seconds = h * 3600 + m * 60 + s;
-    ans.h = seconds / 3600;
-    ans.m = (seconds - ans.h * 3600) / 60;
-    ans.s = seconds - ans.h * 3600 - ans.m * 60;
-    return ans;
+int compare(Rectangle a, Rectangle b) {
+    if (a.getPerimeter() > b.getPerimeter())
+        return 1;
+    if (a.getPerimeter() == b.getPerimeter()) 
+        return 0;
+    return -1;
 }
+
