@@ -37,13 +37,11 @@ Bird createBird()
 	return Bird(birdRect, createBirdDirectionTextures());
 }
 
-Pipes createPipes()
+Pipes createPipes(bool firstScrolling = true)
 {	
 	SDL_Renderer* renderer = gameManager->moduleRenderer->getRenderer();
 	Texture texture("src2/assets/textures/pipe.png", renderer);
 	std::vector<Pipe> pipes(8);
-
-	static bool firstScroll = false;
 
 	Pipes pipesObj(texture, pipes);
 
@@ -54,31 +52,32 @@ Pipes createPipes()
 
 	pipesObj.resetHeight(pipes);
 
-	for (int i = 0, x = 0; i < pipes.size(); i += 2, x += 200) {
-		if (i == 0 || i == 2 && !firstScroll) {
-			pipes[i] = {(SDL_Rect) {x, 0, 50, 0}, true};
-			pipes[i + 1] = {(SDL_Rect) {x, 390, 50, 0}, false};
+	if (firstScrolling) {
+		for (int i = 0, x = 0; i < pipes.size(); i += 2, x += 200) {
+			if (i == 0 || i == 2) {
+				pipes[i] = {(SDL_Rect) {x, 0, 50, 0}, true};
+				pipes[i + 1] = {(SDL_Rect) {x, 390, 50, 0}, false};
+			}
+			std::cout << pipes[i].rect.h << " " << pipes[i + 1].rect.h << std::endl;
 		}
-		std::cout << pipes[i].rect.h << " " << pipes[i + 1].rect.h << std::endl;
 	}
-
-	firstScroll = true;
 
 	return Pipes(texture, pipes);
 }
 
 Scrolling createScrollingBackground()
 {
-	const Pipes pipes = createPipes();
+	const Pipes pipesFirstScroll = createPipes();
+	const Pipes pipesAfterFirstScroll = createPipes(false);
 	SDL_Renderer* renderer = gameManager->moduleRenderer->getRenderer();
 	Texture baseTexture("src2/assets/textures/base.png", renderer);
 	Texture backgroundTexture("src2/assets/textures/background.png", renderer);
-	Background backgrounds({{backgroundTexture, {0, 0, 800, 640}},
-			{baseTexture, {0, 590, 800, 50}}}, pipes);
+	Background backgroundsFirstScroll({{backgroundTexture, {0, 0, 800, 640}},
+			{baseTexture, {0, 590, 800, 50}}}, pipesFirstScroll);
+	Background backgroundsAfterFirstScroll({{backgroundTexture, {0, 0, 800, 640}},
+			{baseTexture, {0, 590, 800, 50}}}, pipesAfterFirstScroll);
 
-	int pipeGap = 150;
-
-	return Scrolling({{backgrounds, 0}, {backgrounds, 800}});
+	return Scrolling({{backgroundsFirstScroll, 0}, {backgroundsAfterFirstScroll, 800}});
 }
 
 int Object::getHighScore(char* FILE_NAME) {
@@ -118,15 +117,20 @@ Object::Object() :
 	scrollingBackground(createScrollingBackground()),
 	menuTexture(Texture("src2/assets/textures/menu.png", gameManager->moduleRenderer->getRenderer())),
 	deadTexture(Texture("src2/assets/textures/gameover.png", gameManager->moduleRenderer->getRenderer())),
-	// font(TTF_OpenFont("src2/assets/fonts/font.ttf", 40 )),
-	// scoreTexture(createScore(font, 0)),
 	score(0),
 	xMoved(0),
 	soundTexture(Texture("src2/assets/textures/sound.png", gameManager->moduleRenderer->getRenderer())),
 	onPlay(true),
 	tutorialTexture(Texture("src2/assets/textures/tutorial.png", gameManager->moduleRenderer->getRenderer())),
-	tutorialButtonTexture(Texture("src2/assets/textures/tutorialButton.png", gameManager->moduleRenderer->getRenderer()))
-{}
+	tutorialButtonTexture(Texture("src2/assets/textures/tutorialButton.png", gameManager->moduleRenderer->getRenderer())),
+	exitButtonTexture(Texture("src2/assets/textures/quit.png", gameManager->moduleRenderer->getRenderer()), (SDL_Rect) {750, 0, 50, 50})
+{
+	initScoreTextures();
+}
+
+std::pair<Texture, SDL_Rect>& Object::getExitButtonTexture() {
+	return exitButtonTexture;
+}
 
 bool Object::getOnPlay() {
 	return onPlay;
@@ -144,16 +148,23 @@ SDL_Rect Object::getSoundRect() {
 }
 
 void Object::toggleSound() {
-	if (onPlay == true) {
-		Mix_Resume(-1);
+	std::cout << "Toggle sound: " << onPlay << std::endl;
+	if (!onPlay) {
+		Mix_Pause(-1);
 	}
 	else {
-		Mix_Pause(-1);
+		Mix_Resume(-1);
 	}
 }
 
 int Object::getScore() {
 	return score;
+}
+
+void Object::destroyScoreTextures() {
+	for (int i = 0; i < scoreTextures.size(); i++) {
+		SDL_DestroyTexture(scoreTextures[i].getTexture());
+	}
 }
 
  void Object::initScoreTextures() {
@@ -171,9 +182,9 @@ int Object::getScore() {
 }
 
 
-std::vector<Texture> Object::getScoreTextures() {
-	initScoreTextures();
-	std::string score = std::to_string(getScore());
+std::vector<Texture> Object::getScoreTextures(bool isBest) {
+
+	std::string score = std::to_string(isBest ? getHighScore(FILE_NAME) : getScore());
 	std::vector<Texture> scoreTextureForRender = {};
 	for (int i = 0; i < score.size(); i++) {
 		scoreTextureForRender.push_back(scoreTextures[score[i] - '0']);
@@ -190,33 +201,47 @@ bool Object::update()
 
 	float deltaTime = gameManager->moduleTimer->getDeltaTime();
 
-	// std::cout << deltaTime << std::endl;
-
     bird.updateYPos(deltaTime); 
 
-	float xMove = 1.0f * deltaTime;
+	float xMove = deltaTime * 0.5f;
 	// float xMove = 0.2f;
 	xMoved += xMove;
 
 	// std::cout << xMoved << std::endl;
 	
-	if(!reachFirstPipe)
+	// for (auto& background : scrollingBackground.getBackgrounds()) {
+	// 	for (auto& pipe : background.first.getPipes().getPipes()) {
+	// 		if (!pipe.isPassed() && bird.getRect().x >= pipe.rect.x + pipe.rect.w) {
+	// 			score++;
+	// 			pipe.setPassed(true);
+	// 			if (onPlay) {
+	// 				gameManager->moduleSound->playScore();
+	// 			}
+	// 			xMoved = 0.0f;
+	// 		}
+	// 	}
+	// }
+
+    if(!reachFirstPipe)
 	{
 		if(xMoved >= 400.0f)
 		{
 			reachFirstPipe = true;
+			score++;
+			if (onPlay)
+				gameManager->moduleSound->playScore();
 			xMoved = 0.0f;
 		}
 	}
-	else 
-	if(xMoved >= 250.0f)
-	{
-		score++;
-		gameManager->moduleSound->playScore();
-		xMoved = 0.0f;
-		// scoreTexture = createScore(font, score);
+	else {
+		if(xMoved >= 200.0f)
+		{
+			score++;
+			if (onPlay)
+				gameManager->moduleSound->playScore();
+			xMoved = 0.0f;
+		}
 	}
-
 
 	///std::cout << scrollingBackground.getBackgrounds().size() << std::endl;
 
@@ -309,7 +334,9 @@ bool detectCollision(Bird& bird, Scrolling& scrollingBackground)
     for (auto& background : scrollingBackground.getBackgrounds())
     {
         if (detectCollision(bird, background) || checkGroundCollision(bird)) {
-			gameManager->moduleSound->playDead();
+			if (gameManager->moduleObject->getOnPlay()) {
+				gameManager->moduleSound->playDead();
+			}
             return true;
     	}
 	}

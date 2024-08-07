@@ -68,6 +68,11 @@ bool Renderer::update()
         }
     }
 
+     // Exit
+    std::pair<Texture, SDL_Rect> exit = gameManager->moduleObject->getExitButtonTexture();
+    renderTexture(exit.first, exit.second);
+
+
     // // Bird
     
     Bird bird = gameManager->moduleObject->getBird();
@@ -76,30 +81,52 @@ bool Renderer::update()
     // // Score
 
     // std::cout << "Score: " << gameManager->moduleObject->getScoreTextures().size() << std::endl;
-    // int scoreTextureSize = gameManager->moduleObject->getScoreTextures().size();
-    // int offsetW = 0;
-    // for (auto& score : gameManager->moduleObject->getScoreTextures()) {
-    //     SDL_Rect scoreBox = {50 + offsetW, 50, 50, 50};
-    //     renderTexture(score, scoreBox);
-    //     offsetW += 50;
-    //     // std::cout << "Score: " << &score << std::endl;
-    // };
-
+    if (gameState == PLAY) {
+        SDL_Rect scoreBox;
+        std::vector<Texture> scoreTexture = gameManager->moduleObject->getScoreTextures();
+        int offsetW = 0;
+        for (auto score : scoreTexture) {
+            scoreBox = {50 + offsetW, 50, 50, 50};
+            renderTexture(score, scoreBox);
+            offsetW += 50;
+            // std::cout << "Score: " << &score << std::endl;
+        };
+    }
 
     // Sound Texture
     
     SDL_Rect srcRect = {0, 0, 404, 309};
     if (gameManager->moduleObject->getOnPlay() == false) {
-        SDL_Rect srcRect = {404, 0, 403, 309};
+        srcRect = {404, 0, 403, 309};
     }
-    SDL_Rect destRect = {750, 0, 50, 50};
+    SDL_Rect destRect = {700, 0, 49, 50};
     renderTexture(gameManager->moduleObject->getSoundTexture(), srcRect, destRect);
 
-    // // Gameover
+    // Gameover
 
     if(gameState == DEAD) {
-        SDL_Rect deadRect = {300, 300, 300, 100};
+        SDL_Rect deadRect = {200, 200, 400, 400};
 		renderTexture(gameManager->moduleObject->getDeadTexture(), deadRect);
+
+        // Score
+
+        SDL_Rect scoreBox = {500, 500, 20, 20};
+        SDL_Rect bestScoreBox = {500, 600, 20, 20};
+        int offsetW = 0;
+        for (auto& score : gameManager->moduleObject->getScoreTextures()) {
+            scoreBox = {520 + offsetW, 425, 20, 20};
+            renderTexture(score, scoreBox);
+            offsetW += 20;
+            // std::cout << "Score: " << &score << std::endl;
+        }
+
+        offsetW = 0;
+        for (auto& score : gameManager->moduleObject->getScoreTextures(true)) {
+            bestScoreBox = {520 + offsetW, 525, 20, 20};
+            renderTexture(score, bestScoreBox);
+            offsetW += 20;
+            // std::cout << "Score: " << &score << std::endl;
+        }
     }
 
     SDL_RenderPresent(renderer);

@@ -32,8 +32,12 @@ private:
 	bool tutorialState = false;
 
 	// // Exit button
-	// Texture exitButtonTexture;
-	// bool exitButtonState = 
+	std::pair<Texture, SDL_Rect> exitButtonTexture;
+
+	char* FILE_NAME = "src2/highScore.txt";
+
+	/// Medal
+	std::pair<Texture, SDL_Rect> medalTexture;
 
 public:
 	Object();
@@ -61,8 +65,15 @@ public:
 
 	// Score Render
 	void initScoreTextures();
+	void destroyScoreTextures();
 	int getScore();
-	std::vector<Texture> getScoreTextures();
+	std::vector<Texture> getScoreTextures(bool isBest = false);
 	int getHighScore(char* FILE_NAME = "src2/highScore.txt");
 	void setHighScore(int score, char* FILENAME = "src2/highScore.txt");
+
+	// Exit Button
+	std::pair<Texture, SDL_Rect>& getExitButtonTexture();
+
+	std::pair<Texture, SDL_Rect>& getMedalTexture();
+
 };

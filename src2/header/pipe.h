@@ -17,4 +17,6 @@ public:
     void resetHeight(std::vector<Pipe>& pipes);
     std::vector<Pipe>& getPipes();
     Texture& getTexture();
+    bool isPassed();
+    void setPassed(bool passed);
 };
