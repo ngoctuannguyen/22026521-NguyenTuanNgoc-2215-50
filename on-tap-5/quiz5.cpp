@@ -3,14 +3,17 @@
 using namespace std;
 
 int** inputMatrix(int nRows, int nCols) {
-    int** matrix = new int* [nRows];
-    for (int i = 0; i < nRows; ++i) {
-        matrix[i] = new int [nCols];
-        for (int j = 0; j < nCols; ++j) {
-            cin >> matrix[i][j];
+    int** matrix = new int*[nRows];
+
+    for(int i = 0; i < nCols; i++) {
+        matrix[i] = new int[nCols];
+    }
+
+    for (int* i = matrix[0]; i < (matrix[0] + nRows); ++i) {
+        for (int* j = i; j < (i + nCols); ++j) {
+            cin >> *j;
         }
     }
-    
     return matrix;
 }
 
@@ -27,9 +30,10 @@ int** transpose(int** matrix, int nRows, int nCols) {
 }
 
 void printMatrix(int** matrix, int nRows, int nCols) {
-    for (int i = 0; i < nRows; ++i) {
-        for (int j = 0; j < nCols; ++j) {
-            cout << matrix[i][j] << " ";
+
+    for (int* i = matrix[0]; i < (matrix[0] + nRows); ++i) {
+        for (int* j = i; j < (i + nCols); ++j) {
+            cout << *j << " ";
         }
         cout << endl;
     }
