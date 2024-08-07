@@ -3,10 +3,7 @@
 #include "header/gamemanager.h"
 #include <iostream>
 #include "header/common.h"
-
-const SDL_Rect SCORE_BOX = {
-    200, 80, 100, 50
-};
+#include "header/texture.h"
 
 Renderer::Renderer()
 {   
@@ -63,6 +60,12 @@ bool Renderer::update()
     if(gameState == MENU) {
         SDL_Rect menuRect = {300, 180, 200, 400};
         renderTexture(gameManager->moduleObject->getMenuTexture(), menuRect);
+        SDL_Rect tutorialRect = {0, 0, 100, 100};
+        renderTexture(gameManager->moduleObject->getTutorialButtonTexture(), tutorialRect);
+        if (gameManager->moduleObject->getTutorialState()) {
+            SDL_Rect tutorialRect = {0, 0, 800, 640};
+            renderTexture(gameManager->moduleObject->getTutorialTexture(), tutorialRect);
+        }
     }
 
     // // Bird
@@ -71,6 +74,17 @@ bool Renderer::update()
     renderTexture(bird.getTexture(), bird.getRect());
 
     // // Score
+
+    // std::cout << "Score: " << gameManager->moduleObject->getScoreTextures().size() << std::endl;
+    // int scoreTextureSize = gameManager->moduleObject->getScoreTextures().size();
+    // int offsetW = 0;
+    // for (auto& score : gameManager->moduleObject->getScoreTextures()) {
+    //     SDL_Rect scoreBox = {50 + offsetW, 50, 50, 50};
+    //     renderTexture(score, scoreBox);
+    //     offsetW += 50;
+    //     // std::cout << "Score: " << &score << std::endl;
+    // };
+
 
     // Sound Texture
     

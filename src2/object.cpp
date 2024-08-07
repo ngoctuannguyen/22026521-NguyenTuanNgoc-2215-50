@@ -10,7 +10,6 @@
 
 bool detectCollision(Bird& bird, std::pair<Background,float>& backgrounds);
 bool detectCollision(Bird& bird, Scrolling& scrollingBackgrounds);
-// SDL_Texture* createScore(TTF_Font* font, int score = 0);
 bool checkGroundCollision(Bird& bird);
 
 std::map<BirdDirection, Texture> createBirdDirectionTextures()
@@ -82,6 +81,37 @@ Scrolling createScrollingBackground()
 	return Scrolling({{backgrounds, 0}, {backgrounds, 800}});
 }
 
+int Object::getHighScore(char* FILE_NAME) {
+    std::ifstream file(FILE_NAME);
+    int highScore = 0;
+    if (file.is_open()) {
+        file >> highScore;
+        if (file.fail()) {
+            highScore = 0; 
+			// Handle case where the file might be empty or not contain an integer
+        }
+        file.close();
+    } else {
+        std::cerr << "Unable to open file for reading: " << FILE_NAME << std::endl;
+    }
+    return highScore;
+}
+
+void Object::setHighScore(int highScore, char* FILENAME) {
+    int currentHighScore = getHighScore(FILENAME);
+
+    if (highScore > currentHighScore) {
+        std::ofstream file(FILENAME);
+        if (file.is_open()) {
+            file << highScore;
+            file.close();
+        } else {
+            std::cerr << "Unable to open file for writing: " << FILENAME << std::endl;
+        }
+    }
+}
+
+
 Object::Object() :
 
 	bird(createBird()),
@@ -93,8 +123,9 @@ Object::Object() :
 	score(0),
 	xMoved(0),
 	soundTexture(Texture("src2/assets/textures/sound.png", gameManager->moduleRenderer->getRenderer())),
-	onPlay(true)
-
+	onPlay(true),
+	tutorialTexture(Texture("src2/assets/textures/tutorial.png", gameManager->moduleRenderer->getRenderer())),
+	tutorialButtonTexture(Texture("src2/assets/textures/tutorialButton.png", gameManager->moduleRenderer->getRenderer()))
 {}
 
 bool Object::getOnPlay() {
@@ -121,6 +152,37 @@ void Object::toggleSound() {
 	}
 }
 
+int Object::getScore() {
+	return score;
+}
+
+ void Object::initScoreTextures() {
+	SDL_Renderer* renderer = gameManager->moduleRenderer->getRenderer();
+	scoreTextures.push_back(Texture("src2/assets/textures/large/0.png", renderer));
+	scoreTextures.push_back(Texture("src2/assets/textures/large/1.png", renderer));	
+	scoreTextures.push_back(Texture("src2/assets/textures/large/2.png", renderer));
+	scoreTextures.push_back(Texture("src2/assets/textures/large/3.png", renderer));
+	scoreTextures.push_back(Texture("src2/assets/textures/large/4.png", renderer));
+	scoreTextures.push_back(Texture("src2/assets/textures/large/5.png", renderer));
+	scoreTextures.push_back(Texture("src2/assets/textures/large/6.png", renderer));
+	scoreTextures.push_back(Texture("src2/assets/textures/large/7.png", renderer));
+	scoreTextures.push_back(Texture("src2/assets/textures/large/8.png", renderer));
+	scoreTextures.push_back(Texture("src2/assets/textures/large/9.png", renderer));
+}
+
+
+std::vector<Texture> Object::getScoreTextures() {
+	initScoreTextures();
+	std::string score = std::to_string(getScore());
+	std::vector<Texture> scoreTextureForRender = {};
+	for (int i = 0; i < score.size(); i++) {
+		scoreTextureForRender.push_back(scoreTextures[score[i] - '0']);
+	}
+	return scoreTextureForRender;
+}
+
+
+
 bool Object::update()
 {
 	if(gSManager.getGameState() != PLAY)
@@ -146,7 +208,8 @@ bool Object::update()
 			xMoved = 0.0f;
 		}
 	}
-	else if(xMoved >= 180.0f)
+	else 
+	if(xMoved >= 250.0f)
 	{
 		score++;
 		gameManager->moduleSound->playScore();
@@ -162,6 +225,7 @@ bool Object::update()
 	if(detectCollision(bird, scrollingBackground)) {
 		std::cout << "Collision!" << std::endl;
 		gSManager.setGameState(DEAD);
+		setHighScore(getScore());
 	}
 
 	return true;
@@ -207,6 +271,23 @@ Texture& Object::getDeadTexture()
 	return deadTexture;
 }
 
+Texture& Object::getTutorialTexture()
+{
+	return tutorialTexture;
+}
+
+Texture& Object::getTutorialButtonTexture() {
+	return tutorialButtonTexture;
+}
+
+bool Object::getTutorialState() {
+	return tutorialState;
+}
+
+void Object::setTutorialState(bool tutorialButtonState) {
+	tutorialState = tutorialButtonState;
+}
+
 SDL_Texture* Object::ScoreTexture()
 {
 	return scoreTexture;
@@ -218,6 +299,7 @@ void Object::resetGame()
 	scrollingBackground = createScrollingBackground();
 	reachFirstPipe = false;
 	score = 0;
+	tutorialState = false;
 	// mScoreTexture = createScore( mFont, mScore );
 }
 
@@ -253,14 +335,6 @@ bool detectCollision(Bird& bird, std::pair<Background,float>& background)
     }
     return false;
 }
-
-// SDL_Texture* createScore(TTF_Font* font, int score)
-// {
-// 	std::string result = "SCORE: " + std::to_string(score);
-// 	SDL_Renderer* renderer = gameManager->moduleRenderer->getRenderer();
-// 	auto surfaceMessage = TTF_RenderText_Solid(font, result.c_str(), {255, 255, 255});
-// 	return SDL_CreateTextureFromSurface(renderer, surfaceMessage);
-// }
 
 bool checkGroundCollision(Bird& bird)
 {

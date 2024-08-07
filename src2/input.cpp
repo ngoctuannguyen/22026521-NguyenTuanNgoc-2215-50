@@ -14,6 +14,16 @@ bool handleSoundClick(SDL_Rect& buttonRect) {
     return false;
 }
 
+bool handleTutorialClick(SDL_Rect& buttonRect) {
+    int x, y;
+    SDL_GetMouseState(&x, &y);
+    if (x >= buttonRect.x && x <= (buttonRect.x + buttonRect.w) &&
+        y >= buttonRect.y && y <= (buttonRect.y + buttonRect.h)) {
+        return true;
+    }
+    return false;
+}
+
 bool Input::update()
 {
 	SDL_Event e;
@@ -27,10 +37,14 @@ bool Input::update()
 		else if(e.type == SDL_MOUSEBUTTONDOWN)
 		{		
 			SDL_Rect rect = gameManager->moduleObject->getSoundRect();
+			SDL_Rect tutorialButtonRect = {0, 0, 100, 100};
 			if (handleSoundClick(rect)) {
 				bool onPlay = gameManager->moduleObject->getOnPlay();
 				gameManager->moduleObject->setOnPlay(!onPlay);
 				gameManager->moduleObject->toggleSound();
+			}
+			else if (handleTutorialClick(tutorialButtonRect)) {
+				gameManager->moduleObject->setTutorialState(!gameManager->moduleObject->getTutorialState());
 			}
 			else {
 				if(gameManager->moduleObject->getGameStateManager().getGameState() == MENU) {
