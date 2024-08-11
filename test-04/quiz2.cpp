@@ -83,7 +83,7 @@ BigInt operator+(const BigInt& num, const BigInt& other)
     char* number = new char[strResult.length() + 1];
     strcpy(number, strResult.c_str());
 
-    return BigInt(num);
+    return BigInt(number);
 }   
 
 int main() {
